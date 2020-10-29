@@ -16,15 +16,78 @@
             padding: 0 0 20px 0;
             background-color: beige;
             box-shadow: 5px 5px 5px black;
+            position: relative;
+            width: 600px;
+            height: 300px;
         }
 
         nav {
             text-align: center;
         }
 
-        #carousel {
-            height: 300px;
-            width: 600px;
+        #prev,
+        #next {
+            position: absolute; 
+            /* top: 0%; */
+            color: white;
+            font-size: 2em;
+            font-weight: 900;
+            z-index: 6; 
+            /* TODO (for student): 
+            So that the cursor changes to a pointer when these elements are rolled over add "cursor: pointer"
+            Tinker with the top values to position the elements as depicted in the video specs (use percentage units)
+            Notice that z-index is set to 6.  If you take out the z-index property or set it to -1 the elements will be 
+            obscured by the images/slides
+             */
+        }
+
+        #prev {
+            left: 10px;
+        }
+
+        #next {
+            right: 10px;
+        }
+
+        #prev:hover,
+        #next:hover {
+            background-color: silver;
+        }
+
+        #change-pic {
+            visibility: hidden;
+        }
+
+        #img1,
+        #img2 {
+            position: absolute;
+            transition: opacity 2s;
+            right: 0px;
+        }
+
+        figcaption {
+            position: absolute;
+            bottom: 0px;
+            left: 240px;
+
+        }
+
+        footer {
+            background-color: blanchedalmond;
+            padding: 10px;
+        }
+
+        footer nav {
+            text-align: left;
+        }
+
+        footer ol {
+            margin: auto;
+            width: 30%;
+        }
+
+        #selected {
+            background-color: aliceblue;
         }
     </style>
 </head>
@@ -35,10 +98,55 @@
     </nav>
 
     <figure>
-        <img src="" id="carousel" alt="Lorem">
-        <figcaption>Lorem</figcaption>
+        <a id="prev">&#10094;</a>
+        <img src="" id="img1" alt="lorem">
+        <a id="next">&#10095;</a>
+        <figcaption id="figcaption">Lorem</figcaption>
     </figure>
-    <footer>Images courtesy of <a href="http://picsum.photos">Lorem Picsum</a>. Fair use only.</footer>
+
+    <script>
+        let pics = {
+            picArray: ['alarm.jpg',
+                'bridge.jpg',
+                'grapes.jpg',
+                'landscape.jpg'
+            ],
+            // TODO:  Like in the flashcards assignment modify the above picArray to an array of four objects.  
+            // Each object should contain a caption attribute (and an appropriate caption string). 
+            // Each object should also contain a filename attribute (and the appropriate filename).  
+            currentPic: -1,
+            getNextPic: function () {
+                this.currentPic = this.currentPic + 1;
+                if (this.currentPic >= this.picArray.length) {
+                    this.currentPic = 0;
+                }
+                return this.picArray[this.currentPic];
+            },
+            //TODO: Create a getPrevPic function.  It should work like the getNextPic function but
+            // backup the slideshow instead of advance it.  Make sure when you are on the first slide (alarm.jpg) 
+            // and the user hits the backup button again it goes to the fourth slide (e.g. landscape.jpg).
+        }
+
+        let changePic = function () {
+            let path = 'images/' + pics.getNextPic();
+            document.getElementById('img1').src = path;
+            console.log("The element's id:", this.id)
+        }
+        //TODO: Modify changePic to check for this.id  If this.id is "next" run the method
+        // pics.getNextPic().  Otherwise run the method pics.getPrevPic()
+        // Use the object/information that is returned from the method to change the image and caption.
+        // Finally,  add code to check to see whether the user is advancing the slideshow manually. If
+        // they are, use clearInterval to stop the slideshow from advancing automatically.  
+
+        //This line adds an onclick event to the next buttons. The event executes the changePic function
+        document.getElementById('next').addEventListener('click', changePic)
+        //TODO:  add a line that adds an onclick event to the previous button, make the click event execute the changePic function
+        
+        //TODO: This line calls the changePic function every 7 seconds.  Modify it to run every 4 seconds.
+        let intervalVar = setInterval(changePic, 7000)
+        changePic();
+
+    </script>
 </body>
 
 </html>
